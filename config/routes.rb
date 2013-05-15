@@ -1,4 +1,7 @@
 Gmaps::Application.routes.draw do
+  resources :cities
+
+
   resources :characters
 
   # The priority is based upon order of creation:

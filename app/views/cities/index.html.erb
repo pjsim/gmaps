@@ -1,0 +1,83 @@
+<h1>Listing cities</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>State</th>
+    <th>Latitude</th>
+    <th>Longitude</th>
+    <th>Gmaps</th>
+    <th>Population</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @cities.each do |city| %>
+  <tr>
+    <td><%= city.name %></td>
+    <td><%= city.state %></td>
+    <td><%= city.latitude %></td>
+    <td><%= city.longitude %></td>
+    <td><%= city.gmaps %></td>
+    <td><%= city.population %></td>
+    <td><%= link_to 'Show', city %></td>
+    <td><%= link_to 'Edit', edit_city_path(city) %></td>
+    <td><%= link_to 'Destroy', city, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New City', new_city_path %>
+
+<%= gmaps4rails(@json) %>
+
+
+<div id='population-range' style="width: 500px"></div>
+<input type="text" id="filtered-pop" style="width: 200px"/>
+
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    Gmaps.map.callback = function() {
+
+      var PopulationFilter = {
+        min: 800000,
+        max: 10000000,
+      };
+
+      $( "#filtered-pop" ).val( (PopulationFilter.min)+ " - " + (PopulationFilter.max))
+      $("#population-range").slider({
+        range: true,
+        min: PopulationFilter.min,
+        max: PopulationFilter.max,
+        values: [ PopulationFilter.min, PopulationFilter.max ],
+        slide: function(event, ui) {
+          $( "#filtered-pop" ).val( (ui.values[ 0 ])+ " - " + (ui.values[ 1 ]))
+          PopulationFilter.min = ui.values[ 0 ]
+          PopulationFilter.max = ui.values[ 1 ]
+          applyFilters()
+        }
+      });
+
+      var VisibleMarkers = function() {
+      var filtered = _.reject(Gmaps.map.markers, function(marker) {
+          return marker.population < PopulationFilter.min || marker.population > PopulationFilter.max;
+        });
+        return filtered
+       }
+
+      var applyFilters = function() {
+        _.each(Gmaps.map.markers, function(marker) {
+          Gmaps.map.hideMarker(marker)
+        })
+        _.each(VisibleMarkers(), function(marker) {
+          Gmaps.map.showMarker(marker)
+        })
+      };
+   }
+});
+</script>
+
