@@ -1,4 +1,6 @@
 Gmaps::Application.routes.draw do
+  resources :locations
+
   resources :cities
 
 

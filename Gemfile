@@ -40,3 +40,8 @@ gem 'jquery-ui-rails'
 # gem 'debugger'
 gem 'gmaps4rails'
 
+gem "geocoder"
+
+gem "nifty-generators"
+
+gem "mocha", :group => :test
