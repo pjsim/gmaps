@@ -25,3 +25,5 @@
   <%= link_to "Destroy", @location, :confirm => 'Are you sure?', :method => :delete %> |
   <%= link_to "View All", locations_path %>
 </p>
+
+<%= gmaps4rails(@json) %>
